@@ -96,7 +96,7 @@ app.post("/register", function(req, res){
 });
 
 var mongoose = require('mongoose');
-var db = mongoose.connect('ds013579.mlab.com:13579/paikka');
+var db = mongoose.connect('mongodb://<paikka>:<paikka>@ds013579.mlab.com:13579/paikka');
 //var db = mongoose.connect('mongodb://localhost/test');
 var UserSchema=new mongoose.Schema({
 	firstname: String,
