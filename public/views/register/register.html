@@ -1,0 +1,114 @@
+<!--<h1>Sign-up</h1>
+  <form action="/register" method="post">
+      <div>
+        <label>Username:</label>
+        <input ng-model='user.username' type="text" name="username" />
+        <br/>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input ng-model='user.password' type="password" name="password" />
+		<br/>
+      </div>
+	   <div>
+        <label>Password2:</label>
+        <input ng-model='user.password2' type="password" name="password" />
+		<br/>
+      </div>
+      <div>
+        <input type="submit" value="Submit" />
+      </div>
+    </form>-->
+	
+<div class="container log-reg-form">
+	<div class="row">
+		 <div class="col-sm-6 col-md-4 col-md-offset-4">
+			<h1>Create account</h1>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="control-label col-sm-3">Firstname:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.firstname' type="text" name="firstname" class="form-control" id="firstname" placeholder="firstname">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Lastname:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.lastname' type="text" name="lastname" class="form-control" id="lastname" placeholder="lastname">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Email:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.email' type="text" name="email" class="form-control" id="email" placeholder="email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">City:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.city' type="text" name="city" class="form-control" id="city" placeholder="city">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Username:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.username' type="text" name="username" class="form-control" id="username" placeholder="username">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3">Password:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.password' type="password" name="password" class="form-control" id="password" placeholder="password">
+					</div>
+				</div>
+				 <div class="form-group">
+					<label class="control-label col-sm-3">Confirm:</label>
+					<div class="col-sm-9">
+						<input ng-model='user.password2' type="password" name="password2" class="form-control" id="password2" placeholder="confirm password">
+					</div>
+				</div>
+<!--<script>
+ angular.module('checkboxExample', [])
+    .controller('ExampleController', ['$scope', function($scope) {
+      $scope.checkboxModel = {
+       value1 : 'consumer',
+       value2 : 'company'
+     };
+	 $scope.checkboxModel.value1=false;
+ }]);
+</script>	
+				<div class="form-group">
+					<hr>
+						<label>Consumer account
+							<input type="checkbox" ng-init = "checkboxModel.value1 = !checkboxModel.value2" ng-model="checkboxModel.value1" ng-true-value="'consumer'" ng-false-value="''" ng-change="checkboxModel.value2 = !checkboxModel.value1">
+						</label>
+						<label class="pull-right">Company account
+							<input type="checkbox"  ng-init = "checkboxModel.value2 = !checkboxModel.value1" ng-model="checkboxModel.value2" ng-true-value="'company'" ng-false-value="''" ng-change="checkboxModel.value1 = !checkboxModel.value2">
+						</label>
+							<input type="text" ng-show="checkboxModel.value1" ng-hide="checkboxModel.value2"  ng-model='user.roles' name="someData"  ng-init='{{checkboxModel.value1}}'/>
+							<input type="text" ng-show="checkboxModel.value2" ng-hide="checkboxModel.value1"  ng-model='user.roles' name="someData" placeholder='{{checkboxModel.value2}}'/>
+				</div>-->
+				<div class="control-group form-inline text-center">
+					<hr>
+					<div class="controls">
+						<label class="radio inline">
+							<input type="radio" ng-model='user.roles' name="gender" value="consumer" checked>
+							 Consumer account
+						</label>
+						<label class="radio inline" style="padding-left : 10%">
+							<input type="radio" ng-model='user.roles' name="gender" value="company">
+							 Company account
+						</label>
+					</div>	
+				</div>
+				</br>
+				<div class="form-group">
+					<div class="col-sm-12 controls">
+						<button ng-click='register(user)' class="btn btn-success pull-left">Submit</button>
+					</div>
+				</div>                                                                            
+                </div>
+			</form>
+		</div>
+	</div>
+</div>

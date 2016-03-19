@@ -1,0 +1,18 @@
+<h1>Profile</h1>
+
+{{currentUser}}
+
+<div ng-show="currentUser.roles.indexOf('admin')> -1">
+	<h2>Admin</h2>
+	<table class="table table-striped">
+		<tr ng-repeat="user in users">
+			<td>{{user.username}}</td>	
+		</tr>
+	</table>
+</div>
+<div ng-show="currentUser.roles.indexOf('company')>-1">
+	<h2>Company</h2>
+</div>
+<div ng-show="currentUser.roles.indexOf('consumer')>-1">
+	<h2>Consumer</h2>
+</div>	

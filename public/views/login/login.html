@@ -1,0 +1,44 @@
+<!--<h1>Login</h1>
+<!--<input ng-model='user.username'/></br>
+<input ng-model='user.password'/></br>
+<button ng-click='login(user)'>Login</button>-->
+<div class="container log-reg-form">
+	<div class="row">
+		 <div class="col-sm-6 col-md-4 col-md-offset-4">
+			 <h1>Login</h1>
+			 <form role="form">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+					<input ng-model='user.username' type="text" class="form-control" id="username" placeholder="username">
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+					<input ng-model='user.password' type="password" class="form-control" id="pwd" placeholder="password">
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox"> Remember me</label>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12 controls">
+						<button ng-click='login(user)' class="btn btn-success">Sing-in</button> 
+						<a href="#register">Create Account</a>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+    <!--<form action="/login" method="post">
+      <div>
+        <label>Username:</label>
+        <input ng-model='user.username' type="text" name="username" />
+        <br/>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input ng-model='user.password' type="password" name="password" />
+      </div>
+      <div>
+        <input type="submit" value="Submit" />
+      </div>
+    </form>-->
