@@ -118,6 +118,6 @@ var UserModel =mongoose.model("UserModel", UserSchema);
 
 app.use(express.static(__dirname + '/public'));
 
-port = Number(process.env.Port || 3000);
+var port = Number(process.env.Port || 3000);
 
 app.listen(port);
