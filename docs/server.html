@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>server.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>server.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> app = express();
+
+<span class="hljs-keyword">var</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>);
+<span class="hljs-keyword">var</span> multer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'multer'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>keep uploaded picture orinigal name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> storage = multer.diskStorage({ 
+    destination: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, file, cb</span>) </span>{
+        cb(<span class="hljs-literal">null</span>, <span class="hljs-string">'./public/uploads'</span>)
+    },
+    filename: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, file, cb</span>) </span>{
+        cb(<span class="hljs-literal">null</span>, file.originalname)
+  }
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>for parsing multipart/form-data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> upload = multer({ storage: storage });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>for parsing application/json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.use(bodyParser.json());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>for parsing application/x-www-form-urlencoded</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.use(bodyParser.urlencoded({ extended: <span class="hljs-literal">true</span> }));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>passport module for authenticating user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> passport = <span class="hljs-built_in">require</span>(<span class="hljs-string">'passport'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>passport strategy for authentication</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> LocalStrategy = <span class="hljs-built_in">require</span>(<span class="hljs-string">'passport-local'</span>).Strategy;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>cookie parser for cookie creation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> cookieParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cookie-parser'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>for session creation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> session = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express-session'</span>);
+
+app.use(session({ secret: <span class="hljs-string">'this is the secret'</span>, resave: <span class="hljs-literal">false</span>, saveUninitialized: <span class="hljs-literal">false</span>}));
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(<span class="hljs-string">'/user'</span>, bodyParser.json());</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>serialize user instance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+passport.serializeUser(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">user, done</span>) </span>{
+  done(<span class="hljs-literal">null</span>, user);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>deserialize user instance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+passport.deserializeUser(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">user, done</span>) </span>{
+  done(<span class="hljs-literal">null</span>, user);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Setting up strategy for authentication</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>passport.use(<span class="hljs-keyword">new</span> LocalStrategy(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">username, password, done</span>) 
+</span>{
+	UserModel.findOne({username: username, password: password}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, user</span>)</span>{
+		<span class="hljs-keyword">if</span>(user) {
+			<span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, user);
+		}
+		<span class="hljs-keyword">if</span>(err){
+		<span class="hljs-keyword">return</span> done(<span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>, {message: <span class="hljs-string">'Unable to login'</span>});
+		}
+		});
+}));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>server login response</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.post(<span class="hljs-string">"/login"</span>, passport.authenticate(<span class="hljs-string">'local'</span>), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	res.json(req.user);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>server logout response</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/logout"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	req.logOut();
+	res.send(<span class="hljs-number">200</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>check if authenticated</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> auth = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>)
+</span>{
+	<span class="hljs-keyword">if</span>(!req.isAuthenticated())
+		res.send(<span class="hljs-number">401</span>);
+	<span class="hljs-keyword">else</span>
+		next();
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Upload picture in server</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/upload"</span>, upload.array(<span class="hljs-string">'file'</span>), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res, next</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(req.body) <span class="hljs-comment">// this contains all text data</span>
+    <span class="hljs-built_in">console</span>.log(req.files) <span class="hljs-comment">// this is always an empty array</span>
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>MongoDb call to get all users</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">"/user"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	UserModel.find(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, users</span>)</span>{
+		res.json(users);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>MongoDb call to get all users and check is authenticated</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">"/rest/user"</span>,auth, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	UserModel.find(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, users</span>)</span>{
+		res.json(users);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Get loggedIn user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">"/loggedin"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	res.send(req.isAuthenticated() ? req.user : <span class="hljs-string">'0'</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Register new user in db</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/register"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>check if username is already in User db document- If not creates one</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	UserModel.findOne({username: req.body.username}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, user</span>)</span>{
+		<span class="hljs-keyword">if</span>(user)
+		{
+			<span class="hljs-comment">/*ToDo user already exists*/</span>
+			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newUser = <span class="hljs-keyword">new</span> UserModel(req.body);
+			newUser.roles=[req.body.roles];
+			newUser.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, user</span>)
+			</span>{
+				req.login(user, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>)
+				</span>{
+						<span class="hljs-keyword">if</span>(err){<span class="hljs-keyword">return</span> next(err);}
+						res.json(user);
+				});
+				
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p><strong><strong>Company-Http-calls<strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Db call get all companies</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/company'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	CompanyModel.find(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Db call for getting logedin user company info</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/company/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> user = req.params.id;
+	<span class="hljs-built_in">console</span>.log(user);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Find company information from company db document in order of loggedin user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	CompanyModel.find({userid: user}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Db add logedin user company</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/add"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>check if company name already is in company document 
+If not create new one with re.body form data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	CompanyModel.findOne({name: req.body.name}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, company</span>)</span>{
+		<span class="hljs-keyword">if</span>(company)
+		{
+			<span class="hljs-comment">/*ToDo user already exists*/</span>
+			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newCompany = <span class="hljs-keyword">new</span> CompanyModel(req.body);
+					
+			newCompany.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, company</span>)
+			</span>{
+						res.json(company);
+				
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Db call for deleting company from db</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.delete(<span class="hljs-string">'/company/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> Removeid = req.params.id;
+	<span class="hljs-built_in">console</span>.log(Removeid);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Find one from company db document in order of company id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	CompanyModel.findOne({_id: Removeid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, company</span>)</span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"This object will get deleted "</span> + company);
+        company.remove();
+		res.json(company);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Db call for getting getting company fields in order of current user :id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/company/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		<span class="hljs-built_in">console</span>.log(Editid);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Find one from company db document in order of company id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+		CompanyModel.findOne({_id: Editid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, company</span>)</span>{
+			res.json(company);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Db call for updating company info in db</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.put(<span class="hljs-string">'/company/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Find one from company db document in order of company id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        CompanyModel.findById(Editid, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, company</span>) </span>{
+
+            <span class="hljs-keyword">if</span> (err)
+                res.send(err);
+
+            company.name = req.body.name;  <span class="hljs-comment">// update the bears info</span>
+			company.street = req.body.street;
+			company.postalCode = req.body.postalCode;
+			company.city = req.body.city;
+			company.phone = req.body.phone;
+			company.email = req.body.email;
+			company.logo = req.body.logo;
+			company.brandId = req.body.brandId;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>save the bear</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            company.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
+                <span class="hljs-keyword">if</span> (err)
+                    res.send(err);
+
+                res.json({ message: <span class="hljs-string">'company updated!'</span> });
+            });
+
+        });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p><strong><strong>Brand-Http-calls<strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Db call for getting all companies of current brand</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/brandCompanies/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		<span class="hljs-built_in">console</span>.log(Editid);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Find one from company db document in order of brand id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+		CompanyModel.find({brandId: Editid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, response</span>)</span>{
+			res.json(response);
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Db call for getting all brands</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/brand'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	BrandModel.find(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Db call for getting brand in order of brand creator user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/brand/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> user = req.params.id;
+	<span class="hljs-built_in">console</span>.log(user);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Find one from brand db document in order of brand creator user id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	BrandModel.find({userid: user}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Db call for adding new brand in Db</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/addBrand"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Find one from brand db document in order of brand name
+If not found then create one</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	BrandModel.findOne({name: req.body.name}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, brand</span>)</span>{
+		<span class="hljs-keyword">if</span>(brand)
+		{
+			<span class="hljs-comment">/*ToDo user already exists*/</span>
+			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newBrand = <span class="hljs-keyword">new</span> BrandModel(req.body);
+			
+			newBrand.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, brand</span>)
+			</span>{
+				
+						res.json(brand);
+				
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>Db call for deleting brand in Db</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.delete(<span class="hljs-string">'/brand/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> Removeid = req.params.id;
+	<span class="hljs-built_in">console</span>.log(Removeid);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Find one from brand db document in order of brand id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	
+	BrandModel.findOne({_id: Removeid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, brand</span>)</span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"This object will get deleted "</span> + brand);
+        brand.remove();
+		res.json(brand);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Db call for getting brand in order of brand creator user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/brand/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		<span class="hljs-built_in">console</span>.log(Editid);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Find one from brand db document in order of brand id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+		BrandModel.findOne({_id: Editid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, brand</span>)</span>{
+			res.json(brand);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Db call for updating brand fields</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.put(<span class="hljs-string">'/brand/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Find one from brand db document in order of brand id</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		
+        BrandModel.findById(Editid, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, brand</span>) </span>{
+
+            <span class="hljs-keyword">if</span> (err)
+                res.send(err);
+
+            brand.name = req.body.name;  <span class="hljs-comment">// update the bears info</span>
+			brand.street = req.body.street;
+			brand.postalCode = req.body.postalCode;
+			brand.city = req.body.city;
+			brand.phone = req.body.phone;
+			brand.email = req.body.email;
+			brand.logo = req.body.logo;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>save the bear</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            brand.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
+                <span class="hljs-keyword">if</span> (err)
+                    res.send(err);
+
+                res.json({ message: <span class="hljs-string">'brand updated!'</span> });
+            });
+
+        });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p><strong><strong>End-Brand-Http-calls<strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Get all quest and populate quest created company document inside same .json
+return retrieved data as .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">"/allquest"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	QuestModel
+	.find({})
+	.populate(<span class="hljs-string">'companyId'</span>)
+	.exec(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, response</span>) </span>{
+	  <span class="hljs-keyword">if</span> (err){
+	  }	
+		res.json(response);
+	})
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Get all quests
+return retrieved data as .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">"/quest"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	QuestModel.find(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, quests</span>)</span>{
+		res.json(quests);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>Get all quests in order od company objectId
+return retrieved data as .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/quest/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> company = req.params.id;
+	<span class="hljs-built_in">console</span>.log(company);
+	QuestModel.find({companyId: company}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Check if quest name is in quest document. If not create one
+return retrieved data as .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.post(<span class="hljs-string">"/addQuest"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	
+	QuestModel.findOne({name: req.body.quest.name}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		<span class="hljs-keyword">if</span>(response)
+		{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>ToDo user already exists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newQuest = <span class="hljs-keyword">new</span> QuestModel(req.body.quest);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>Loop clues array from req.body and push data in quest document questClues fields</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			
+			<span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i &lt; req.body.clues.length; i++){
+				newQuest.questClues.push({name: req.body.clues[i].name, clue: req.body.clues[i].clue, icon: req.body.clues[i].icon, endCode: req.body.clues[i].endCode});
+
+			}
+			newQuest.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)
+			</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>if(err){return next(err);}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						res.json(response);
+				
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>http call for getting user in order of id: phoneidentifier
+return .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/phoneUser/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> user = req.params.id;
+	 PhoneUserModel.findOne({identifier: user}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>Check if phoneuser document has identifier = :id
+If not create new one
+return .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/phoneUser/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> PhoneId = req.params.id;
+	PhoneUserModel.findOne({identifier: PhoneId}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		<span class="hljs-keyword">if</span>(response)
+		{
+			<span class="hljs-comment">/*ToDo user already exists*/</span>
+			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newPhoneUser = <span class="hljs-keyword">new</span> PhoneUserModel(req.body);
+			newPhoneUser.identifier = req.params.id;
+			newPhoneUser.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)
+			</span>{
+						<span class="hljs-comment">/*if(err){return next(err);}*/</span>
+						res.json(response);
+				
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>Create phone user quest when user start quest in phone
+id:phone identifier
+questId: selected quest objectId
+clueId: selected quest first clue or phase objectId
+check if quest already in phoneUserQuest document in order of qusetId
+return .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/phoneUserQuest/:id/:questId/:clueId'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> questId = req.params.questId;
+	UserQuestModel.findOne({questId: questId}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		<span class="hljs-keyword">if</span>(response)
+		{
+			<span class="hljs-comment">/*ToDo user already exists*/</span>
+			res.json(<span class="hljs-literal">null</span>);
+			<span class="hljs-keyword">return</span>;
+		}
+		<span class="hljs-keyword">else</span>
+		{
+			<span class="hljs-keyword">var</span> newUserQuest = <span class="hljs-keyword">new</span> UserQuestModel(req.body);
+			newUserQuest.phoneId = req.params.id;
+			newUserQuest.questId = req.params.questId;
+			newUserQuest.currentClue = req.params.clueId;
+			newUserQuest.questState = <span class="hljs-string">"accepted"</span>;
+			newUserQuest.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)
+			</span>{
+					<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"läpi:"</span> + response);
+						<span class="hljs-comment">/*if(err){return next(err);}*/</span>
+						res.json(response);
+			});
+		}
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>Update phone user quest when user start quest in phone
+id: phoneUserQuest document instance objectId
+clueId: selected quest next clue or phase objectId
+find user in order of questId
+return .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/userQuestUpdate/:id/:clueId/:questState'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		
+        UserQuestModel.findById(Editid, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>) </span>{
+
+            <span class="hljs-keyword">if</span> (err)
+                res.send(err);
+
+			response.currentClue = req.params.clueId;
+			response.questState = req.params.questState;
+			
+            response.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
+                <span class="hljs-keyword">if</span> (err)
+                    res.send(err);
+
+                res.json({ message: <span class="hljs-string">'quest updated!'</span> });
+            });
+
+        });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>http call get all users quest
+:id = phoneUser document instance objectId</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/rest/userQuest/:id'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> user = req.params.id;
+	UserQuestModel.find({phoneId: user}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>)</span>{
+		res.json(response);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>Delete quest from QuestModel document
+:id quest objectId</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.delete(<span class="hljs-string">'/quest/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> Removeid = req.params.id;
+	<span class="hljs-built_in">console</span>.log(Removeid);
+	QuestModel.findOne({_id: Removeid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, response</span>)</span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"This object will get deleted "</span> + response);
+        response.remove();
+		res.json(response);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>Delete quest from QuestModel document
+:id quest objectId</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.delete(<span class="hljs-string">'/removeQuest/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+	<span class="hljs-keyword">var</span> companyId = req.params.id;
+	<span class="hljs-built_in">console</span>.log(companyId);
+	QuestModel.find({company: companyId}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, response</span>)</span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"This object will get deleted "</span> + response);
+        response.remove();
+		res.json(response);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>find quest in order of quest id
+id: quest objectId
+return single quest .json</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+app.get(<span class="hljs-string">'/quest/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		<span class="hljs-built_in">console</span>.log(Editid);
+		QuestModel.findOne({_id: Editid}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, response</span>)</span>{
+		res.json(response);
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-66">&#182;</a>
+              </div>
+              <p>Update quest in QuestModel db document
+:id = quest objectId</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+app.put(<span class="hljs-string">'/quest/:id'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+		<span class="hljs-keyword">var</span> Editid = req.params.id;
+		
+        QuestModel.findById(Editid, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, response</span>) </span>{
+
+            <span class="hljs-keyword">if</span> (err)
+                res.send(err);
+			
+			response.questType = [req.body.quest.questType];  
+            response.name = req.body.quest.name;
+			response.description = req.body.quest.description;
+			response.prizeDescription = req.body.quest.prizeDescription;
+			response.questIcon = req.body.quest.questIcon;
+			response.prizeAmount = req.body.quest.prizeAmount;
+			response.questDuration = req.body.quest.questDuration;
+			response.questStartTime = req.body.quest.questStartTime;
+			response.questEndTime = req.body.quest.questEndTime;
+			response.questEndCode = req.body.quest.questEndCode;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <p>check if clues array not empty and reset questClues field in db document. Then add new array data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			
+			<span class="hljs-keyword">if</span>(req.body.clues[<span class="hljs-number">0</span>]){
+				response.update({questClues:[]}, { $set: { questClues: [] }}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, affected</span>)</span>{
+				});
+				<span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i &lt; req.body.clues.length; i++){
+					response.questClues.push({name: req.body.clues[i].name, clue: req.body.clues[i].clue, icon: req.body.clues[i].icon, endCode: req.body.clues[i].endCode});
+				}
+			}
+			response.save(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>{
+                <span class="hljs-keyword">if</span> (err)
+                    res.send(err);
+
+                res.json({ message: <span class="hljs-string">'quest updated!'</span> });
+            });
+        });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
+              </div>
+              <p><strong><strong>End-Quest-Http-calls<strong><strong><strong><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongoose'</span>), Schema = mongoose.Schema;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-69">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-69">&#182;</a>
+              </div>
+              <p>set mongodb database connection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> db = mongoose.connect(<span class="hljs-string">'mongodb://localhost/test'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-70">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-70">&#182;</a>
+              </div>
+              <p>User document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> UserSchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	firstname: <span class="hljs-built_in">String</span>,
+	lastname: <span class="hljs-built_in">String</span>,
+	email: <span class="hljs-built_in">String</span>,
+	city: <span class="hljs-built_in">String</span>,
+	username: <span class="hljs-built_in">String</span>,
+	password: <span class="hljs-built_in">String</span>,
+	roles: [<span class="hljs-built_in">String</span>],
+	company: <span class="hljs-built_in">String</span>
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-71">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>PhoneUsers document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> PhoneUserSchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	identifier: <span class="hljs-built_in">String</span>
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-72">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-72">&#182;</a>
+              </div>
+              <p>UserQuest document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> UserQuestSchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	phoneId: {type: db.Schema.Types.ObjectId, ref: <span class="hljs-string">'PhoneUserSchema'</span>},
+	questId: <span class="hljs-built_in">String</span>,
+	currentClue: <span class="hljs-built_in">String</span>,
+	questState: <span class="hljs-built_in">String</span>
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-73">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-73">&#182;</a>
+              </div>
+              <p>Company document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> CompanySchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	name: <span class="hljs-built_in">String</span>,
+	street: <span class="hljs-built_in">String</span>,
+	postalCode: <span class="hljs-built_in">String</span>,
+	city: <span class="hljs-built_in">String</span>,
+	phone:	<span class="hljs-built_in">String</span>,
+	email:	<span class="hljs-built_in">String</span>,
+	logo: <span class="hljs-built_in">String</span>,
+	lat: <span class="hljs-built_in">String</span>,
+    lng: <span class="hljs-built_in">String</span>,
+	loc: [{
+        latitude: <span class="hljs-built_in">String</span>,
+        longitude: <span class="hljs-built_in">String</span>
+    }],
+	userid: <span class="hljs-built_in">String</span>,
+	brandId: {type: db.Schema.Types.ObjectId, ref: <span class="hljs-string">'BrandModel'</span>}
+});
+
+mongoose.model(<span class="hljs-string">'Company'</span>, CompanySchema);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-74">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-74">&#182;</a>
+              </div>
+              <p>Brand document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> BrandSchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	name: <span class="hljs-built_in">String</span>,
+	street: <span class="hljs-built_in">String</span>,
+	postalCode: <span class="hljs-built_in">String</span>,
+	city: <span class="hljs-built_in">String</span>,
+	phone:	<span class="hljs-built_in">String</span>,
+	email:	<span class="hljs-built_in">String</span>,
+	logo: <span class="hljs-built_in">String</span>,
+	lat: <span class="hljs-built_in">String</span>,
+    lng: <span class="hljs-built_in">String</span>,
+	loc: [{
+        latitude: <span class="hljs-built_in">String</span>,
+        longitude: <span class="hljs-built_in">String</span>
+    }],
+	userid: <span class="hljs-built_in">String</span>,
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-75">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-75">&#182;</a>
+              </div>
+              <p>Quest document schema</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> QuestSchema=<span class="hljs-keyword">new</span> mongoose.Schema({
+	company: {type: db.Schema.Types.ObjectId, ref: <span class="hljs-string">'CompanyModel'</span>},
+	companyId: {type: db.Schema.Types.ObjectId, ref: <span class="hljs-string">'CompanyModel'</span>},
+	name: <span class="hljs-built_in">String</span>,
+	description: <span class="hljs-built_in">String</span>,
+	prizeDescription: <span class="hljs-built_in">String</span>,
+	prizeAmount: <span class="hljs-built_in">Number</span>,
+	questType: [<span class="hljs-built_in">String</span>],
+	questClues:[{
+        name: <span class="hljs-built_in">String</span>,
+        clue: <span class="hljs-built_in">String</span>,
+		icon: <span class="hljs-built_in">String</span>,
+		endCode: <span class="hljs-built_in">String</span>
+    }],
+	questIcon: <span class="hljs-built_in">String</span>,
+	questDone: <span class="hljs-built_in">Boolean</span>,
+	questDuration: <span class="hljs-built_in">Number</span>,
+	questStartTime: <span class="hljs-built_in">String</span>,
+	questEndTime: <span class="hljs-built_in">String</span>,
+	questEndCode: <span class="hljs-built_in">String</span>,
+	qrCode: <span class="hljs-built_in">String</span>
+});
+
+mongoose.model(<span class="hljs-string">'Quest'</span>, QuestSchema);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-76">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-76">&#182;</a>
+              </div>
+              <p>Mongoose models</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> UserModel =mongoose.model(<span class="hljs-string">"UserModel"</span>, UserSchema);
+<span class="hljs-keyword">var</span> CompanyModel =mongoose.model(<span class="hljs-string">"CompanyModel"</span>, CompanySchema);
+<span class="hljs-keyword">var</span> BrandModel =mongoose.model(<span class="hljs-string">"BrandModel"</span>, BrandSchema);
+<span class="hljs-keyword">var</span> QuestModel =mongoose.model(<span class="hljs-string">"QuestModel"</span>, QuestSchema);
+<span class="hljs-keyword">var</span> PhoneUserModel =mongoose.model(<span class="hljs-string">"PhoneUserModel"</span>, PhoneUserSchema);
+<span class="hljs-keyword">var</span> UserQuestModel =mongoose.model(<span class="hljs-string">"UserQuestModel"</span>, UserQuestSchema);
+
+<span class="hljs-comment">/*var company = new CompanyModel({name: "K-rauta",  address:"jokukatu", city:"Tampere"})
+var admin = new UserModel({username: "alice", password: "alice", firstname:"alice", lastname:"alice", roles: ["admin"] })
+var user = new UserModel({username: "bob", password: "bob", firstname:"bob", lastname:"alice", roles: ["user"] })
+
+admin.save();
+user.save();
+company.save();*/</span>
+
+
+app.use(express.static(__dirname + <span class="hljs-string">'/public'</span>));
+
+<span class="hljs-keyword">var</span> port = <span class="hljs-built_in">Number</span>(process.env.Port || <span class="hljs-number">3000</span>);
+
+app.listen(port);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

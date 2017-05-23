@@ -1,0 +1,117 @@
+<div ng-show="currentUser.roles.indexOf('admin')> -1">
+	<h2>Admin</h2>
+</div>
+<div class="container modal-form modal-bg" ng-show="currentUser.roles.indexOf('company')>-1">
+	<div class="row">
+		<div class="col-sm-10 col-md-8 col-lg-6  col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+			<div class="col-sm-12 col-md-12 modal-login-inner-bg">
+				<a style="margin-top:-40px; margin-right:-40px" class="btn btn-info btn-lg pull-right" href="#profile"><span class="glyphicon glyphicon-remove-circle"></span></a>
+				</br>
+				<hr class="modal-hr">
+				<div class="col-sm-8 col-md-8 col-lg-6 col-sm-offset-2 col-md-offset-2 col-lg-offset-3">
+					<form action= ""class="form-horizontal" id="myForm">
+						<h2 ng-hide="id" class="modal-h2">ADD QUEST</h2>
+						<h2 ng-hide="!id" class="modal-h2">EDIT QUEST</h2>
+						<div class="form-group">
+							<div class="col-sm-12">
+								<div class="help-block with-errors"></div>
+								<select data-ng-model='selectedOption' ng-options="c for c in questType" class="form-control" id="sel1" data-error="Selection required" required>
+									<!--<option  disabled="disabled" selected>Select quest type</option>
+									<option>Exploring-quest</option>
+									<option>Treasure-quest</option>-->
+								</select>
+							</div>	
+						</div><!-- End form group -->
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input ng-model='quest.name' type="text" maxlength="50" class="form-control" id="quest-name" placeholder="name" required>
+							</div>	
+						</div><!-- End form group -->
+						<div class="form-group">
+							<div class="col-sm-12">
+								<textarea ng-model='quest.description' class="form-control" maxlength="180" rows="4" id="quest-description" placeholder="description" required></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12">
+								<textarea ng-model='quest.prizeDescription' class="form-control" maxlength="250" rows="4" id="quest-prizeDescription" placeholder="prize description"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input ng-model='quest.prizeAmount' type="text" maxlength="4" class="form-control" id="quest-name" placeholder="prize amount">
+							</div>	
+						</div><!-- End form group -->
+						<div class="form-group">
+							<div class="col-sm-12 form-inline">
+								<input ng-model='quest.questDurationHours' type="number" style="width : 49%; padding-left : 1% " class="form-control" min="0" max="48" size="2" placeholder="quest duration hrs"/>
+								<input ng-model='quest.questDurationMin' type="number" style="width : 49%; padding-left : 1%" class="form-control" min="0" max="60" size="2" placeholder="quest duration min"/>
+							</div>	
+						</div><!-- End form group --> 
+						<div class="form-group">
+							<div class="col-sm-12">
+								quest start:
+								<input ng-model='quest.questStartTime' type="datetime-local" class="form-control" id="questStartTime" placeholder="quest start time">
+							</div>	
+						</div><!-- End form group -->
+						<div class="form-group">
+							<div class="col-sm-12">
+								quest expires:
+								<input ng-model='quest.questEndTime' type="datetime-local" class="form-control" id="questEndTime" placeholder="quest end time">
+							</div>	
+						</div><!-- End form group -->
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input ng-model='quest.questEndCode' type="text" maxlength="15" class="form-control" id="quest-name" placeholder="quest ending password">
+							</div>	
+						</div><!-- End form group -->
+						<div data-ng-repeat="clue in clues">
+						<hr class="modal-hr">
+						<h4 style="margin-top : -50px; padding-bottom: 20px; color : white">Phase</h4>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='clue.name' type="text" maxlength="15" class="form-control" style="width : 100%" id="quest-name" placeholder="Phase name">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12 form-inline">
+									<textarea ng-model="clue.clue" type="text" maxlength="100" rows="2" class="form-control" style="width : 100%"  name="" placeholder="Enter quest clue" ng-model="clue.clu"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='clue.endCode' type="text" maxlength="15" class="form-control" id="quest-name" placeholder="phase ending password">
+								</div>	
+							</div><!--
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="help-block with-errors"></div>
+									<input type="file" value=""class="checkbox" ngf-select ng-model="file" ngf-pattern="'image/*'"
+									ngf-accept="'image/*'" ngf-max-size="20MB" required>
+								</div>
+							</div>-->	
+						</div>
+						<hr class="modal-hr">
+						<a ng-click="addNewChoice()" style="margin-top : -60px; margin-left: -20px; color: white; padding-bottom: 0px" class="btn btn-info btn-xs pull-left" href=""><span class="glyphicon glyphicon-plus"></span></a>
+						<a ng-click="removeNewChoice()" style="margin-top : -60px;  margin-left: 0px; color: white; padding-bottom: 0px"  class="btn btn-info btn-xs pull-left" href=""><span class="glyphicon glyphicon-minus"></span></a>	
+						<div class="form-group">
+							<div class="col-sm-12">
+								<button ng-hide="id" ng-click="addQuest();goProfile()" type="submit" id="submit" class="btn btn-md btn-success">CREATE QUEST</button>
+								<!--<button ng-click="editQuest(quests[0]._id)" type="submit" class="btn btn-primary">Edit</button>-->
+								<button ng-hide="!id" ng-click="removeQuest(id);goProfile()" type="submit" id="edit-buttons" class="btn btn-sm btn-primary">REMOVE</button>
+								<button ng-hide="!id" ng-click="updateQuest();goProfile()" type="submit" id="edit-buttons" class="btn btn-sm btn-success">UPDATE</button>
+							</div>
+						</div>				
+					</form>
+				</div>
+			</div>
+		</div>			
+	</div><!-- End Row -->
+</div><!-- End create quest Container -->
+	
+<div ng-show="currentUser.roles.indexOf('consumer')>-1">
+	<h2>Consumer</h2>
+</div>
+<script>
+$('#myForm').validator();
+</script>	

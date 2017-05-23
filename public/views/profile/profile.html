@@ -1,7 +1,3 @@
-<h1>Profile</h1>
-
-{{currentUser}}
-
 <div ng-show="currentUser.roles.indexOf('admin')> -1">
 	<h2>Admin</h2>
 	<table class="table table-striped">
@@ -10,9 +6,147 @@
 		</tr>
 	</table>
 </div>
-<div ng-show="currentUser.roles.indexOf('company')>-1">
-	<h2>Company</h2>
-</div>
+<div class="container" ng-show="currentUser.roles.indexOf('brand')>-1">
+	<div class="container" ng-show="!brands[0]">
+		<section>
+			<div class="row">
+				<div class="col-sm-8">
+						<h3>BRAND NAME<small><a href="#addbrand" class="">  add brand information</a></small></h3>
+					</div>
+					<div class="col-sm-4">
+						<img src="img/logo.png" class="img-responsive" alt="image">
+					</div>				
+			</div><!--End Row-->	
+		</section>
+	</div>
+	<div class="container" ng-show="brands[0]">
+		<section>
+			<div class="row">
+				<div class="col-sm-8">
+						<h1>{{brands[0].name}}<small><a href="#addbrand" class="">  Edit brand info</a></small></h1>
+						<address>
+							{{brands[0].street}}</br>
+							{{brands[0].city}} - {{brands[0].postalCode}}</br>
+							Email: {{brands[0].email}}</br>
+							Phone: {{brands[0].phone}}
+						</address>
+					</div>
+					<div class="col-sm-4">
+						<img src="uploads/{{brands[0].logo}}" width="200" height="200" class="img-responsive" alt="image">
+					</div>		
+			</div><!--End Row-->
+		</section>
+	</div>
+	</br>
+	<hr class="class-hr">
+	<div class="container">
+		<section>
+			<h1 class="pull-left">Stores</h1>
+		</section>
+	</div>	
+	<div class="container">
+		<section>
+			<div class="row">
+			</br>
+				<div ng-repeat="stores in brandCompanies">
+					<div class="clearfix" ng-if="$index % 3 == 0"></div>
+					<div class="col-sm-4">
+						<div class="panel panel-default" style="height: 180px">
+							<div class="panel-body">
+								<div class="col-sm-7 col-md-7">
+									<h4>{{stores.name}}<small><a href="" class="">Store sites</a></small></h4>
+									<address>
+										{{stores.street}}</br>
+										{{stores.city}} - {{stores.postalCode}}</br>
+										Email: {{stores.email}}</br>
+										Phone: {{stores.phone}}
+									</address>
+								</div>
+								<div class="col-sm-5 col-md-5">
+									<img src="uploads/{{stores.logo}}" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px" width="200" height="200" class="img-responsive" alt="image">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>	
+</div><!--End-of-brand-section-->		
+<div class="container" ng-show="currentUser.roles.indexOf('company')>-1">
+		<div class="container" ng-show="!companies[0]">
+		<section>
+			<div class="row">
+				<div class="col-sm-8">
+						<h3>COMPANY NAME<small><a href="#addcompany" class="">  add company information</a></small></h3>
+					</div>
+					<div class="col-sm-4">
+						<img src="img/logo.png" class="img-responsive" alt="image">
+					</div>				
+			</div><!--End Row-->	
+		</section>
+	</div>
+	<div class="container" ng-show="companies[0]">
+		<section>
+			<div class="row">
+				<div class="col-sm-8">
+						<h1 ng-hide="companyBrand">{{companies[0].name}}<small><a href="#addcompany" class="">  Edit company info</a></small></h1>
+						<h1 ng-show="companyBrand">{{companyBrand.name}}<small><a href="#addcompany" class="">  Edit company info</a></small></h1>
+
+						<address>
+							<b>{{companies[0].name}}</b></br>
+							{{companies[0].street}}</br>
+							{{companies[0].city}} - {{companies[0].postalCode}}</br>
+							Email: {{companies[0].email}}</br>
+							Phone: {{companies[0].phone}}
+						</address>
+					</div>
+					<div class="col-sm-4">
+						<img ng-hide="companyBrand" src="uploads/{{companies[0].logo}}" width="200" height="200" class="img-responsive" alt="image">
+						<img ng-show="companyBrand" src="uploads/{{companyBrand.logo}}" width="200" height="200" class="img-responsive" alt="image">
+					</div>		
+			</div><!--End Row-->
+		</section>
+	</div>
+	</br>
+	<hr class="class-hr">
+	<!-- quest-->
+	<div class="container">
+		<section>
+			<h1 class="pull-left">Quests</h1>
+			<a ng-hide="!companies[0]" href="#addquest" id="createQuest" class="btn btn-lg btn-success form-inline pull-right">CREATE NEW QUEST</a>
+		</section>
+	</div>	
+	<div class="container">
+		<section>
+			<div class="row">
+			</br>
+				<div ng-repeat="quest in quests">
+					<div class="clearfix" ng-if="$index % 3 == 0"></div>
+					<div class="col-sm-4">
+						<div class="panel panel-default" style="height: 350px">
+							<div class="panel-body">
+								<div class="col-sm-9 col-md-9">
+									<h4><b>{{quest.name}}</b>  <small><a href="#/addquest/{{quest._id}}" class="">Edit quest</a></small></h4>
+									<p><b>Start time:</b>{{quest.questStartTime}}</p>
+									<p><b>End time:</b> {{quest.questEndTime}}</p>
+								</div>
+								<div class="col-sm-3 col-md-3">
+									<img src="img/questIcon/{{quest.questIcon}}" style="display: block; margin-left: auto; margin-right: auto; margin-top: 30px" width="80" height="80" class="img-responsive" alt="image">
+									<p style="margin-left: -10px; text-align: center"><b>{{quest.questType[0]}}</b></p>
+								</div>
+								<div class="col-sm-12 col-md-12">
+									<p><b>Description:</b></p>
+									<p>{{quest.description}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>	
+</div>	
 <div ng-show="currentUser.roles.indexOf('consumer')>-1">
 	<h2>Consumer</h2>
 </div>	

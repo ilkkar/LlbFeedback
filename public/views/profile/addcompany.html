@@ -1,0 +1,103 @@
+<div ng-show="currentUser.roles.indexOf('admin')> -1">
+	<h2>Admin</h2>
+</div>
+<div class="container modal-form modal-bg2" ng-show="currentUser.roles.indexOf('company')>-1">	
+	<div class="row">
+			<div class="col-sm-10 col-md-8 col-lg-6  col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+				<div class="col-sm-12 col-md-12 modal-login-inner-bg">
+					<a style="margin-top:-40px; margin-right:-40px" class="btn btn-info btn-lg pull-right" href="#profile"><span class="glyphicon glyphicon-remove-circle"></span></a>
+					</br>
+					<hr class="modal-hr">
+					<div class="col-sm-8 col-md-8 col-lg-6 col-sm-offset-2 col-md-offset-2 col-lg-offset-3">
+						<form class="form-horizontal" id="myForm" data-toggle="validator" role="form">
+							<h2 ng-hide="companies[0]" class="modal-h2">ADD COMPANY</h2>
+							<h2 ng-hide="!companies[0]" class="modal-h2">EDIT COMPANY</h2>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='company.name' maxlength="15" type="text" class="form-control" id="street-name" placeholder="Company name" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='company.street' type="text" class="form-control" id="company-street" placeholder="street" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='company.postalCode' maxlength="15" type="text" class="form-control" id="company-postalCode" placeholder="postalcode" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div ng-show="addressErr"> {{addressErr}}</div>
+									<input ng-model='company.city' maxlength="15" ng-change="geocodeAddress()" type="text" class="form-control" id="company-city" placeholder="city" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input ng-model='company.phone' type="text" class="form-control" id="company-phone" placeholder="phone">
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="help-block with-errors"></div>
+									<input ng-model='company.email' type="email" class="form-control" id="company-email" placeholder="email" data-error="Bruh, that email address is invalid" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="help-block with-errors"></div>
+									<select data-ng-model='selectedOption' ng-options="c for c in diffBrands" class="form-control" id="sel1" data-error="Selection required" required>
+									</select>
+								</div>	
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<div class="help-block with-errors"></div>
+									<input type="file" value=""class="checkbox" ngf-select ng-model="file" ngf-pattern="'image/*'"
+									ngf-accept="'image/*'" ngf-max-size="20MB" required>
+								</div>
+							</div><!-- End form group -->
+							<div class="form-group">
+								<div class="col-sm-12">
+									<button ng-hide="companies[0]" ng-click="uploadFiles(file);addCompany()" type="submit" id="submit" class="btn btn-sm btn-success">ADD COMPANY</button>
+									<!--<button ng-hide="!companies[0]" ng-click="editCompany(companies[0]._id)" type="submit" class="btn btn-primary">Edit</button>-->
+									<button ng-hide="!companies[0]" ng-click="removeCompany(companies[0]._id)"type="submit"  id="edit-buttons"  class="btn btn-sm btn-primary">REMOVE</button>
+									<button ng-hide="!companies[0]" ng-click="uploadFiles(file);Update()" type="submit" id="edit-buttons" class="btn btn-sm btn-success push-right">UPDATE</button>
+								</div>
+							</div>	
+						</form>	
+					</div>
+				</div>
+			</div><!-- End Row -->
+	</div>	
+</div><!-- End Companies Container -->
+	<!--<div class="container">	
+		<section>
+				<div class="row">
+					<div class="col-md-4">
+						<img ng-src="uploads/{{companies[0].logo}}" width="100" height="100">
+					</div>
+					<div class="col-md-8">
+						<h2>{{companies[0].name}}</h2>
+					</div>	
+				</div>
+					<div class="row">
+						<div class="col-lg-4">	
+							<address>
+								<strong>{{companies[0].name}}</strong></br>
+								{{companies[0].street}}</br>
+								{{companies[0].city}} - {{companies[0].postalCode}}</br>
+								Email: {{companies[0].email}}</br>
+								Phone: {{companies[0].phone}}
+							</address>
+						</div>
+					</div>
+		</section>
+	</div><!--End Company information container container-->
+<div ng-show="currentUser.roles.indexOf('consumer')>-1">
+	<h2>Consumer</h2>
+</div>	
+<script>
+$('#myForm').validator();
+</script>

@@ -1,4 +1,12 @@
-var app = angular.module('Passport', ['ngRoute']);
+var app = angular.module('Passport', ['ngRoute','ngFileUpload']); 
+	
+app.run(function ($rootScope, $location) {
+    $rootScope.$on('$locationChangeSuccess', function () {
+       	$rootScope.currentPage = $location.path().substr(1);
+    });
+});
+
+// Angular routes for page structures and controllers for the pages
 
 app.config(function($routeProvider) {
 	$routeProvider
@@ -8,6 +16,31 @@ app.config(function($routeProvider) {
 		.when('/profile', {
 		templateUrl: '/views/profile/profile.html',
 		controller: 'ProfileCtrl',
+		resolve:{
+			logincheck: checkLoggedin
+		}
+	  })
+	   .when('/addquest', {
+		templateUrl: '/views/profile/addquest.html',
+		controller: 'AddQuestCtrl',
+		resolve:{
+			logincheck: checkLoggedin
+		}
+	  })
+	  .when('/addquest/:id?', {
+		controller: 'AddQuestCtrl', 
+		templateUrl: '/views/profile/addquest.html',
+	  })
+	  .when('/addcompany', {
+		templateUrl: '/views/profile/addcompany.html',
+		controller: 'AddCompanyCtrl',
+		resolve:{
+			logincheck: checkLoggedin
+		}
+	  })
+	    .when('/addbrand', {
+		templateUrl: '/views/profile/addbrand.html',
+		controller: 'AddBrandCtrl',
 		resolve:{
 			logincheck: checkLoggedin
 		}
@@ -27,6 +60,8 @@ app.config(function($routeProvider) {
 		 redirectTo: '/home' 
 	  })
   });
+  
+  //Angular function which check is user logged in
   
   var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
   {
@@ -51,6 +86,8 @@ app.config(function($routeProvider) {
 	  return deferred.promise;
   }; 
   
+  //NavController and logout angular function which reset currentUser and redirect /home page
+  
   app.controller("NavCtrl", function ($rootScope, $scope, $http, $location){
 	  $scope.logout = function()
 	  {
@@ -61,11 +98,3 @@ app.config(function($routeProvider) {
 		});		 
 	  }
   });
-     angular.module('checkboxExample', [])
-    .controller('ExampleController', ['$scope', function($scope) {
-      $scope.checkboxModel = {
-       value1 : true,
-       value2 : 'YES'
-     };
-    }]);
- 

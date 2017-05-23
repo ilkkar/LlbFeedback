@@ -11,38 +11,72 @@
 	<link href="css/customStyle.css" rel="stylesheet"/>
 	<script src="js/jquery-1.12.1.js"></script>
 	<script src="js/bootstrap.js"></script>
+	
+	<script src="js/ng-file-upload-shim.min.js"></script> 
 	<script src="js/angular.js"></script>
+	<script src="js/ng-file-upload-all.min.js"></script> 
+	<script src="js/ng-file-upload.min.js"></script> 
 	<script src="js/angular-route.js"></script>
 	<script src="js/app.js"></script>
 	<script src="views/login/login.js"></script>
 	<script src="views/register/register.js"></script>
 	<script src="views/profile/profile.js"></script>
+	<script src="js/directives/fileModel.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> 
+	<script src="views/profile/addcompany.js"></script>
+	<script src="views/profile/addquest.js"></script>
+	<script src="views/profile/addbrand.js"></script>
+
+	<style>
+		input {
+			max-width: 100%;
+		} 
+	</style>
 </head>
 <body ng-app="Passport">
-
 	<!--Navbar-->
-	<nav ng-controller="NavCtrl" class="navbar navbar-inverse navbar-fixed-top" id="my-navbar">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-					<a href="#home" class="navbar-brand">PAIKKA</a>
-			</div><!--End Navbar header-->
-				<div class="collapse navbar-collapse" id="navbar-collapse">
-				<a href="#login" ng-show="!currentUser" class="btn btn-success navbar-btn navbar-right">Sing-up</a>
-				<a href="#logout" ng-show="currentUser" ng-click="logout()" class="btn btn-danger navbar-btn navbar-right">Logout</a>
-					<ul class="nav navbar-nav">
-						<li><a href="#home">Home</a>
-						<li ng-show="currentUser"><a href="#profile">Profile</a>
-					</ul>
+	<div class="header-bg" ng-show="currentPage === 'home'">
+		<div ng-controller="NavCtrl" class="navbar navbar-inverse" id="my-navbar">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div><!--End Navbar header-->
+					<div class="collapse navbar-collapse" id="navbar-collapse">
+					<a href="#register" ng-show="!currentUser" class="btn btn-lg btn-primary navbar-btn navbar-right">SIGN-UP</a>
+					<a href="#login" ng-show="!currentUser" class="btn btn-lg btn-warning navbar-btn navbar-right">LOGIN</a>
+					<a href="#logout" ng-show="currentUser" ng-click="logout()" class="btn btn-lg btn-primary navbar-btn navbar-right">LOGOUT</a>
+					<a href="#profile" ng-show="currentUser" class="btn btn-lg btn-warning navbar-btn navbar-right">PROFILE</a>
 				</div>
-		</div><!--End Container-->
-	</nav><!--End Navbar---->
-
+			</div><!--End Container-->
+		</div><!--End Navbar---->
+		<div>
+			<a href="#home"><img src="img/Paikka-logo.png" class="img-responsive img-center logo-size" alt="image"></a>
+		</div>					
+	</div>
+	<div id="custom-bootstrap-menu" class="navbar navbar-default" id="my-navbar" role="navigation" ng-controller="NavCtrl" ng-show="currentPage === 'profile'">
+    <div class="container">
+        <div class="navbar-header"><a href="#home"><img src="img/Header-logo.png" class="img-responsive navbar-btn header-logo-size" alt="image"></a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+        </div>
+       <div class="collapse navbar-collapse navbar-menubuilder">
+            <ul class="nav navbar-nav navbar-right">
+				<li><a href="#login" ng-show="!currentUser" class="btn btn-lg navbar-btn">LOGIN</a>
+                </li>
+                <li><a href="#register" ng-show="!currentUser" class="btn btn-lg navbar-btn">SIGN-UP</a>
+                </li>
+                <li><a href="#logout" ng-show="currentUser" ng-click="logout()" class="btn btn-lg navbar-btn">LOGOUT</a>
+				</li>
+            </ul>
+        </div>
+		<hr class="class-hr">
+    </div>
+</div>
 	<!--<nav ng-controller="NavCtrl">
 		<a href="#home">Home</a>|
 	<span ng-show="!currentUser">
@@ -55,5 +89,7 @@
 	</span>-->	
 	<div ng-view>
 	</div>
+	<script src="js/validator.js"></script>
+	<script src="js/validator.min.js"></script>
 </body>
 </html>
