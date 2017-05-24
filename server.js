@@ -769,6 +769,6 @@ company.save();*/
 
 app.use(express.static(__dirname + '/public'));
 
-var port = Number(process.env.Port || 3000);
+var port = Number(process.env.Port || 27017);
 
 app.listen(port);
